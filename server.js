@@ -57,15 +57,17 @@ app.post('/book', (req,res)=>{
         return null;
     }
     // we are checking if author exist in saved data
-    if(!authors.find((obj)=>{
-        if(obj.id === authorId) true;
-    })) {
+    const author = authors.find((obj)=>{
+        return obj.id == authorId
+    })
+
+    if(!author) {
             res.status(400).json({error:'Author with ID does not exist!'});
             return null;
         }
     // we are checking if book with same ISBN number exist in saved data
     if(books.find((obj)=>{
-        if(obj.isbn === isbn) true;
+        if(obj.isbn == isbn) true;
     })) {
             res.status(400).json({error:'ISBN number already exist in database!'});
             return null;
@@ -83,11 +85,19 @@ app.post('/book', (req,res)=>{
 
 // endpoint to get all saved authors
 app.get('/author', (req,res)=>{
+    if(authors.length === 0){
+        res.status(404).json({error:'No authors found'})
+        return null;
+    }
     res.send(authors)
 })
 
 // endpoint to get all saved books
 app.get('/book', (req,res)=>{
+    if(books.length === 0){
+        res.status(404).json({error:'No books found'})
+        return null;
+    }
     res.send(books)
 })
 
@@ -96,14 +106,14 @@ app.get('/author/:id', (req,res)=>{
     const authorId = req.params.id
     // check if author exist in saved data
     const author = authors.find((obj)=>{
-        if(obj.id === authorId ) obj;
+        if(obj.id == authorId ) obj;
     })
     if(!author) {
         res.status(404).json({error:'Author does not exist in database.'})
         return null
     }
     const authBooks = books.filter((obj)=>{
-        obj.authorId === authorId
+        return obj.authorId == authorId
     })
     if(!authBooks){
         res.status(404).json({error:'No books found linked to the author.'})
@@ -118,7 +128,7 @@ app.get('/book/:id', (rq,res)=>{
     const bookId = req.params.id
     // we are checking if book actualy exist in saved data
     const book = books.find((obj)=>{
-        obj.id === bookId
+        return obj.id == bookId
     })
     if(!book){
         res.status(404).json({error:'Book with specified ID not found in database.'})
@@ -126,7 +136,7 @@ app.get('/book/:id', (rq,res)=>{
     }
     // if book exst, we are fetching data of the author of the book
     const author = authors.find((obj)=>{
-        obj.id === book.authorId
+        return obj.id == book.authorId
     })
     res.status(200).json({author:author, book: book})
 })
