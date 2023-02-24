@@ -224,7 +224,7 @@ app.patch('/book/:id', (req,res)=>{
 
     // checking if book name previousely exist for author
     const authBooks = books.filter((obj)=>{
-        return obj.authorId == authorId
+        return obj.authorId == authorId && obj.id != bookId
     })
 
     if(authBooks!== undefined){
