@@ -195,6 +195,13 @@ app.patch('/book/:id', (req,res)=>{
         res.status(400).json({error:'Another book with same ISBN already exists'});
         return null
     }
+    const authorCheck = authors.find((auth)=>{
+        return auth.id == authorId
+    })
+    if(authorCheck){
+        res.status(400).json({error:'Author does not exist in database'});
+        return null
+    }
 
     books[bookIndex].ISBN = isbn;
     books[bookIndex].authorId = authorId;
