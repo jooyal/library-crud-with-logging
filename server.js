@@ -1,8 +1,14 @@
 const express = require('express');
 const app = express();
+const logger = require('morgan')
+const fs = require('fs')
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
+app.use(logger('combined', {
+    stream: fs.createWriteStream('./access.log', {flags: 'a'})
+}));
+app.use(logger('dev'));
 
 // Node.Js Variables
 let books = [];

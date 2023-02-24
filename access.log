@@ -1,0 +1,5 @@
+::1 - - [24/Feb/2023:08:14:44 +0000] "GET /author HTTP/1.1" 404 28 "-" "PostmanRuntime/7.30.0"
+::1 - - [24/Feb/2023:08:14:45 +0000] "GET /author HTTP/1.1" 404 28 "-" "PostmanRuntime/7.30.0"
+::1 - - [24/Feb/2023:08:14:49 +0000] "POST /author HTTP/1.1" 200 86 "-" "PostmanRuntime/7.30.0"
+::1 - - [24/Feb/2023:08:16:37 +0000] "PATCH /author/1677226489957 HTTP/1.1" 200 103 "-" "PostmanRuntime/7.30.0"
+::1 - - [24/Feb/2023:08:16:55 +0000] "DELETE /author/1677226489957 HTTP/1.1" 200 82 "-" "PostmanRuntime/7.30.0"
