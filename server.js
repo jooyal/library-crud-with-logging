@@ -198,7 +198,8 @@ app.patch('/book/:id', (req,res)=>{
     const authorCheck = authors.find((auth)=>{
         return auth.id == authorId
     })
-    if(authorCheck){
+    console.log(authorCheck);
+    if(authorCheck === undefined){
         res.status(400).json({error:'Author does not exist in database'});
         return null
     }
