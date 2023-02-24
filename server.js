@@ -71,10 +71,28 @@ app.post('/book', (req,res)=>{
             res.status(400).json({error:'Author with ID does not exist!'});
             return null;
         }
+
+    const authBooks = books.filter((obj)=>{
+        return obj.authorId == authorId
+    })
+// chacking if book name previousely exist for author
+    if(authBooks!== undefined){
+         console.log(authBooks);
+        const bookCheck = authBooks.find((obj)=>{
+            return obj.bookName == bookName
+        })
+    
+        if(bookCheck) {
+                res.status(400).json({error:'Book with same name exist for the author!'});
+                return null;
+            }
+    }
     // we are checking if book with same ISBN number exist in saved data
-    if(books.find((obj)=>{
-        if(obj.isbn == isbn) true;
-    })) {
+    const isbnExist = books.find((obj)=>{
+                        return obj.ISBN == isbn
+                      })
+                      console.log(isbnExist);
+    if(isbnExist !== undefined) {
             res.status(400).json({error:'ISBN number already exist in database!'});
             return null;
         }
@@ -198,10 +216,27 @@ app.patch('/book/:id', (req,res)=>{
     const authorCheck = authors.find((auth)=>{
         return auth.id == authorId
     })
-    console.log(authorCheck);
-    if(authorCheck === undefined){
+    // console.log(authorCheck);
+    if(!authorCheck){
         res.status(400).json({error:'Author does not exist in database'});
         return null
+    }
+
+    // checking if book name previousely exist for author
+    const authBooks = books.filter((obj)=>{
+        return obj.authorId == authorId
+    })
+
+    if(authBooks!== undefined){
+         console.log(authBooks);
+        const bookCheck = authBooks.find((obj)=>{
+            return obj.bookName == bookName
+        })
+    
+        if(bookCheck) {
+                res.status(400).json({error:'Book with same name exist for the author!'});
+                return null;
+            }
     }
 
     books[bookIndex].ISBN = isbn;
