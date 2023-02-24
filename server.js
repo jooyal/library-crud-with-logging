@@ -112,7 +112,7 @@ app.get('/author/:id', (req,res)=>{
     const authorId = req.params.id
     // check if author exist in saved data
     const author = authors.find((obj)=>{
-        if(obj.id == authorId ) obj;
+        return obj.id == authorId
     })
     if(!author) {
         res.status(404).json({error:'Author does not exist in database.'})
@@ -130,7 +130,7 @@ app.get('/author/:id', (req,res)=>{
 })
 
 // endpoint to get a single book and the author-data
-app.get('/book/:id', (rq,res)=>{
+app.get('/book/:id', (req,res)=>{
     const bookId = req.params.id
     // we are checking if book actualy exist in saved data
     const book = books.find((obj)=>{
