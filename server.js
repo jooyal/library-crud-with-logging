@@ -141,6 +141,64 @@ app.get('/book/:id', (rq,res)=>{
     res.status(200).json({author:author, book: book})
 })
 
+// endpoint to update author name
+app.patch('/author/:id', (req, res) => {
+    const authName = req.body.name;
+    const authId = req.params.id
+    // check if author with id passed exist in saved data
+    const authorIndex = authors.findIndex((obj)=>{
+        return obj.id == authId
+    })
+    if(authorIndex === -1){
+        res.status(404).json({error:'Author with passed ID does not exist in database'})
+        return null
+    }
+    // check if author name exist in saved data
+    const authCheck = authors.find((auth)=>{
+        return auth.name === authName && auth.id !== authId
+    })
+    if(authCheck){
+        res.status(400).json({error:'Another author with this name already exists'});
+        return null
+    }
+    authors[authorIndex].name = authName
+
+    res.json({message:'Author name updated successfully', updatedAuthorData: authors[authorIndex]});
+  });
+
+// endpoint to update book data
+app.patch('/book/:id', (req,res)=>{
+    const bookId = req.params.id
+    const authorId = req.body.authorId
+    const bookName = req.body.bookName
+    const isbn = req.body.ISBN
+
+    // check if book with id passed exist in saved data
+    const bookIndex = books.findIndex((obj)=>{
+        return obj.id == bookId
+    })
+    if(bookIndex === -1){
+        res.status(404).json({error:'Book with passed ID does not exist in database'})
+        return null
+    }
+    // check if ISBN exist in saved data
+    const bookISBNCheck = books.find((book)=>{
+        return book.ISBN == isbn && book.id != bookId
+    })
+    if(bookISBNCheck){
+        res.status(400).json({error:'Another book with same ISBN already exists'});
+        return null
+    }
+
+    books[bookIndex].ISBN = isbn;
+    books[bookIndex].authorId = authorId;
+    books[bookIndex].bookName = bookName;
+
+    res.status(200).json({message:'Book details updated successfully.', updatedBookData:books[bookIndex]})
+})
+
+
+
 
 
 app.listen(3500, ()=>{
