@@ -145,7 +145,7 @@ app.get('/book/:id', (rq,res)=>{
 app.patch('/author/:id', (req, res) => {
     const authName = req.body.name;
     const authId = req.params.id
-    // check if author with id passed exist in saved data
+    // we check if author with id passed exist in saved data
     const authorIndex = authors.findIndex((obj)=>{
         return obj.id == authId
     })
@@ -153,7 +153,7 @@ app.patch('/author/:id', (req, res) => {
         res.status(404).json({error:'Author with passed ID does not exist in database'})
         return null
     }
-    // check if author name exist in saved data
+    // checking if author name exist in saved data
     const authCheck = authors.find((auth)=>{
         return auth.name === authName && auth.id !== authId
     })
@@ -173,7 +173,7 @@ app.patch('/book/:id', (req,res)=>{
     const bookName = req.body.bookName
     const isbn = req.body.ISBN
 
-    // check if book with id passed exist in saved data
+    // we are checking if book with id passed exist in saved data
     const bookIndex = books.findIndex((obj)=>{
         return obj.id == bookId
     })
@@ -181,7 +181,7 @@ app.patch('/book/:id', (req,res)=>{
         res.status(404).json({error:'Book with passed ID does not exist in database'})
         return null
     }
-    // check if ISBN exist in saved data
+    // we will check if ISBN exist in saved data
     const bookISBNCheck = books.find((book)=>{
         return book.ISBN == isbn && book.id != bookId
     })
@@ -197,8 +197,46 @@ app.patch('/book/:id', (req,res)=>{
     res.status(200).json({message:'Book details updated successfully.', updatedBookData:books[bookIndex]})
 })
 
+// endpoint to delete an author
+app.delete('/author/:id', (req,res)=>{
+    const authorId = req.params.id
 
+    // finding the index of the author in the authors array
+    const authIndex = authors.findIndex((auth)=>{
+        return auth.id == authorId
+    })
+    if(authIndex === -1){
+        res.status(404).json({error:`Author with the ID: ${authorId} not found`})
+        return null
+    }
+    const deletedAuth = authors.splice(authIndex, 1)
 
+    // deleting all books by the deleted author
+    books = books.filter((book)=>{
+        return book.authorId != deletedAuth.id
+    })
+
+    res.status(200).json({message: `Author with the ID: ${authorId} and their books have been deleted.`});
+
+})
+
+// endpoint to delete a book
+app.delete('/book/:id', (req,res)=>{
+    const bookId = req.params.id
+
+    // finding the index of the book in the books array
+    const bookIndex = books.findIndex((book)=>{
+        return book.id == bookId
+    })
+    if(bookIndex === -1){
+        res.status(404).json({error:`Book with the ID: ${bookId} not found.`})
+        return null
+    }
+    
+    books.splice(bookIndex, 1)
+
+    res.status(200).json({message:`Book with ID: ${bookId} have been deleted.`})
+})
 
 
 app.listen(3500, ()=>{
